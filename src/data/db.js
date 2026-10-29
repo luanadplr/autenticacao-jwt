@@ -10,8 +10,3 @@ export const poolDB = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-// poolDB.connect((error) => {
-//   if (error) console.log("🔴 DATABASE ERROR...\n", error);
-//   console.log("🟢 SUCCESSFULL CONNECTION");
-// });
