@@ -12,21 +12,22 @@ export const userRegister = async (req, res) => {
     const { user, password } = req.body;
 
     // >> Verificar se os dados foram realmente enviados
-    if (!user || !password)
+    if (!user || !password) {
       return res.status(400).json({
         message: "🔴 Fields are required",
       });
+    }
 
     // >> Verificar se o usuário já existe no banco
-    const userHasRegister = await poolDB.query(
-      "SELECT id FROM usuarios WHERE user=? LIMIT=1",
+    const [userHasRegister] = await poolDB.query(
+      "SELECT id FROM usuarios WHERE user=? LIMIT 1",
       [user],
     );
-    if (userHasRegister)
+    if (userHasRegister.length > 0) {
       return res.status(409).json({
         message: "🔴 User already registered",
       });
-
+    }
     // >> Criptografar senha
     const hashPassword = await bcrypt.hash(password, 10);
 
