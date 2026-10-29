@@ -75,20 +75,23 @@ export const userLogin = async (req, res) => {
     }
 
     // >> Recuperar os dados do usuário no banco
-    const [userData] = poolDB.query(
+    const [users] = await poolDB.query(
       "SELECT * FROM usuarios WHERE user=? LIMIT 1",
       [user],
     );
 
     // >> Verificar se o usuário existe no banco
-    if (userData.length == 0) {
+    if (users.length == 0) {
       return res.status(401).json({
         message: "🔴 User or Password are wrong",
       });
     }
 
+    // >> Armazenar o usuário encontrado
+    const userData = users[0];
+
     // >> Verificar se senha foi digitada corretamente
-    const verifyPassword = bcrypt.compare(password, userData.password);
+    const verifyPassword = await bcrypt.compare(password, userData.PASSWORD);
     if (!verifyPassword) {
       return res.status(401).json({
         message: "🔴 User or Password are wrong",
@@ -97,7 +100,7 @@ export const userLogin = async (req, res) => {
 
     // >> Gerar o token do usuário
     const token = jwt.sign(
-      { id: userData.id, user: userData.user },
+      { id: userData.id, user: userData.USER },
       process.env.SECRET_KEY_JWT,
       { expiresIn: "1h" },
     );
@@ -105,7 +108,7 @@ export const userLogin = async (req, res) => {
     // >> Retornar ao usuário que o login foi realizado
     return res.status(200).json({
       message: "🟢 Logged",
-      user: { id: userData.id, user: userData.user },
+      user: { id: userData.id, user: userData.USER },
       token,
     });
   } catch (error) {
