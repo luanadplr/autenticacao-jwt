@@ -11,7 +11,7 @@ export const poolDB = mysql.createPool({
   queueLimit: 0,
 });
 
-poolDB.connect((error) => {
-  if (error) console.log("🔴 DATABASE ERROR...\n", error);
-  console.log("🟢 SUCCESSFULL CONNECTION");
-});
+// poolDB.connect((error) => {
+//   if (error) console.log("🔴 DATABASE ERROR...\n", error);
+//   console.log("🟢 SUCCESSFULL CONNECTION");
+// });
