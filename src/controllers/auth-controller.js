@@ -97,7 +97,7 @@ export const userLogin = async (req, res) => {
     const token = jwt.sign(
       { id: userData.id, user: userData.USER },
       process.env.SECRET_KEY_JWT,
-      { expiresIn: "1h" },
+      { expiresIn: "30s" },
     );
 
     // >> Retornar ao usuário que o login foi realizado
