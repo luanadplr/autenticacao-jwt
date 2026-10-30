@@ -54,12 +54,7 @@ export const userRegister = async (req, res) => {
 
 /*
 
-função de fazer login com os dados recebidos no banco
-- para fazer o login precisa receber o user e a senha
--- acredito que precisa verificar o hash de senha?
-- verificar se o user e a senha existe no bd
-- se não retornar ao usuário o erro ao fazer login
-- se existir retornar ao usuário o login feito com sucesso
+função de fazer login com os dados recebidos
 
 */
 
@@ -115,6 +110,28 @@ export const userLogin = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       message: "🔴 Error logging in",
+    });
+  }
+};
+
+/*
+
+Rota para teste ; Acessar a lista de usuários cadastrados caso o login for bem sucedido.
+
+
+*/
+
+export const userList = async (req, res) => {
+  try {
+    const [users] = await poolDB.query(
+      "SELECT id, USER, created_at FROM usuarios ORDER BY id",
+    );
+
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "🔴 List error",
     });
   }
 };
